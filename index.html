@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA na Aprendizagem e Eficiência - Cards Interativos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: white;
+            margin: 20px 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            color: #f0f0f0;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+        
+        .category-selector {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .category-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .category-btn.active {
+            background-color: white;
+            color: #1a2a6c;
+            font-weight: bold;
+        }
+        
+        .category-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 30px;
+            min-height: 450px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .card-front {
+            background-color: white;
+            color: #333;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .card-back {
+            background-color: #1a2a6c;
+            color: white;
+            transform: rotateY(180deg);
+            text-align: left;
+        }
+        
+        .card-content {
+            height: 100%;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        /* Custom scrollbar para o card-back */
+        .card-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .card-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        
+        .card-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        
+        .card-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        .card-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #1a2a6c;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .card-description {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .example-list {
+            text-align: left;
+            margin-top: 10px;
+        }
+        
+        .example-list strong {
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .example-list ul {
+            padding-left: 20px;
+        }
+        
+        .example-list li {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            min-width: 120px;
+        }
+        
+        button:hover {
+            background-color: #1a2a6c;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: white;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .card-count {
+            color: white;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+            
+            .category-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .category-btn {
+                width: 90%;
+                max-width: 300px;
+            }
+            
+            .cards-container {
+                gap: 20px;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 200px;
+            }
+        }
+        
+        .footer {
+            color: white;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IA na Aprendizagem e Eficiência</h1>
+        <p class="subtitle">Clique nos cards para descobrir como a IA transforma a educação e o trabalho</p>
+        
+        <div class="category-selector">
+            <button class="category-btn active" data-category="all">Todos os Temas</button>
+            <button class="category-btn" data-category="definicao">Inteligência Artificial (IA)</button>
+            <button class="category-btn" data-category="education">IA na Educação</button>
+            <button class="category-btn" data-category="efficiency">IA para Eficiência</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="card-count" id="card-count"></div>
+        
+        <div class="cards-container" id="cards-container">
+            <!-- Os cards serão inseridos aqui via JavaScript -->
+        </div>
+        
+        <div class="navigation">
+            <button id="prev-btn">Anterior</button>
+            <button id="next-btn">Próximo</button>
+            <button id="reset-btn">Reiniciar</button>
+        </div>
+        
+        <div class="footer">
+            Apresentação sobre IA na Aprendizagem - Desenvolvida com HTML, CSS e JavaScript
+        </div>
+    </div>
+
+    <script>
+        // Dados para os cards - Foco em IA na aprendizagem e eficiência
+        const cardsData = [
+            // Cartões introdutórios
+            {
+                title: "O que é IA?",
+                icon: "🤖",
+                category: "definicao",
+                description: "A Inteligência Artificial (IA) é um campo da ciência da computação que se dedica a criar máquinas capazes de realizar tarefas que normalmente exigiriam inteligência humana.",
+                examples: ["Sistemas de recomendação", "Assistentes virtuais", "Carros autônomos"]
+            },
+            {
+                title: "História da IA",
+                icon: "📜",
+                category: "definicao",
+                description: "O conceito de IA surgiu na década de 1950, com Alan Turing questionando 'As máquinas podem pensar?'. Desde então, a área passou por vários 'invernos' e 'primaveras' de desenvolvimento.",
+                examples: ["Teste de Turing (1950)", "Primeiro programa de IA (1956)", "Deep Blue vence Kasparov (1997)"]
+            },
+            {
+                title: "Machine Learning",
+                icon: "🧠",
+                category: "definicao",
+                description: "Um subcampo da IA onde os algoritmos aprendem padrões a partir de dados, sem serem explicitamente programados para cada tarefa. É a base de muitos sistemas modernos de IA.",
+                examples: ["Reconhecimento de imagem", "Sistemas de recomendação", "Previsão de tendências"]
+            },
+            {
+                title: "Deep Learning",
+                icon: "🔍",
+                category: "definicao",
+                description: "Uma técnica de Machine Learning que usa redes neurais com muitas camadas (daí o 'deep') para aprender representações complexas de dados. É usado em reconhecimento de imagem, voz e muito mais.",
+                examples: ["Reconhecimento facial", "Tradução automática", "Carros autônomos"]
+            },
+            {
+                title: "IA no Cotidiano",
+                icon: "🏠",
+                category: "definicao",
+                description: "Assistentes virtuais (Siri, Alexa), recomendações de conteúdo (Netflix, Spotify), carros autônomos e diagnósticos médicos são exemplos de IA no nosso dia a dia.",
+                examples: ["Assistentes de voz", "Recomendações personalizadas", "Diagnósticos médicos"]
+            },
+            {
+                title: "Ética na IA",
+                icon: "⚖️",
+                category: "definicao",
+                description: "Questões como viés algorítmico, privacidade de dados, transparência e impacto no emprego são desafios éticos importantes no desenvolvimento e uso da IA.",
+                examples: ["Transparência algorítmica", "Privacidade de dados", "Impacto no mercado de trabalho"]
+            },
+            {
+                title: "Futuro da IA",
+                icon: "🚀",
+                category: "definicao",
+                description: "Especialistas preveem avanços em IA geral (AGI), integração mais profunda com biotecnologia e possíveis impactos transformadores na sociedade e economia.",
+                examples: ["IA geral (AGI)", "Integração com biotecnologia", "Impactos socioeconômicos"]
+            },
+            {
+                title: "IA no Brasil",
+                icon: "🇧🇷",
+                category: "definicao",
+                description: "O Brasil tem se destacado em aplicações de IA na agricultura, finanças e saúde, com iniciativas públicas e privadas para fomentar o ecossistema de inovação em IA.",
+                examples: ["Agricultura de precisão", "Fintechs inteligentes", "Telemedicina com IA"]
+            },
+            // Cartões sobre IA na Educação
+            {
+                title: "IA na Educação Personalizada",
+                icon: "🎓",
+                category: "education",
+                description: "Sistemas de IA adaptam o conteúdo educacional ao ritmo e estilo de aprendizagem de cada aluno, criando experiências de aprendizado únicas e eficazes.",
+                examples: [
+                    "Plataformas como Khan Academy e Duolingo usam IA para personalizar exercícios",
+                    "Sistemas recomendam conteúdos com base no desempenho anterior do aluno",
+                    "Adaptação de dificuldade em tempo real conforme o progresso do estudante",
+                    "Análise de estilo de aprendizagem para oferecer materiais mais adequados"
+                ]
+            },
+            {
+                title: "Tutores Inteligentes",
+                icon: "🤖",
+                category: "education",
+                description: "Assistentes de IA fornecem suporte individualizado 24/7, respondendo dúvidas e explicando conceitos de forma personalizada.",
+                examples: [
+                    "Chatbots educacionais que respondem perguntas em qualquer horário",
+                    "Sistemas que identificam lacunas de conhecimento e sugerem revisões específicas",
+                    "Ferramentas que explicam o mesmo conceito de diferentes formas conforme a necessidade",
+                    "Acompanhamento contínuo do progresso do aluno"
+                ]
+            },
+            {
+                title: "Avaliação Automatizada",
+                icon: "📝",
+                category: "education",
+                description: "IA corrige trabalhos e provas, fornecendo feedback imediato e detalhado para acelerar o processo de aprendizagem.",
+                examples: [
+                    "Correção automática de questões dissertativas com análise de conteúdo semântico",
+                    "Feedback instantâneo em exercícios de programação e matemática",
+                    "Análise de padrões de erro para identificar dificuldades comuns na turma",
+                    "Sugestões de exercícios complementares baseados nos erros identificados"
+                ]
+            },
+            {
+                title: "Criação de Conteúdo Educacional",
+                icon: "✍️",
+                category: "education",
+                description: "Ferramentas de IA ajudam professores a criar materiais didáticos personalizados e engajadores.",
+                examples: [
+                    "Geração automática de exercícios e questões de prova contextualizadas",
+                    "Adaptação de textos para diferentes níveis de leitura e compreensão",
+                    "Criação de apresentações e resumos a partir de conteúdo extenso",
+                    "Produção de material multimídia interativo baseado no currículo"
+                ]
+            },
+            
+            // Cartões sobre IA para Eficiência
+            {
+                title: "Automação de Tarefas Repetitivas",
+                icon: "⚙️",
+                category: "efficiency",
+                description: "IA assume tarefas monótonas, liberando tempo para atividades mais estratégicas e criativas.",
+                examples: [
+                    "Robotic Process Automation (RPA) para processos administrativos repetitivos",
+                    "Organização automática de emails e agendamentos inteligentes",
+                    "Processamento de documentos e extração de informações estruturadas",
+                    "Atualização automática de bancos de dados e sistemas"
+                ]
+            },
+            {
+                title: "Otimização de Processos",
+                icon: "📊",
+                category: "efficiency",
+                description: "Algoritmos analisam dados para identificar melhorias em fluxos de trabalho e aumentar a produtividade.",
+                examples: [
+                    "Sistemas de roteamento inteligente para entregas e logística eficiente",
+                    "Otimização de estoques com previsão de demanda precisa",
+                    "Análise de eficiência em linhas de produção industrial",
+                    "Redução de desperdícios através de monitoramento inteligente"
+                ]
+            },
+            {
+                title: "Assistentes Pessoais Inteligentes",
+                icon: "💼",
+                category: "efficiency",
+                description: "Ferramentas de IA organizam informações e agilizam tomadas de decisão no ambiente profissional.",
+                examples: [
+                    "Agendamento inteligente de reuniões considerando preferências e disponibilidades",
+                    "Resumo automático de documentos longos e relatórios complexos",
+                    "Análise de dados para suporte a decisões estratégicas fundamentadas",
+                    "Organização de tarefas e prioridades com base em prazos e importância"
+                ]
+            },
+            {
+                title: "Aprendizagem Contínua no Trabalho",
+                icon: "📚",
+                category: "efficiency",
+                description: "Sistemas identificam gaps de skills e recomendam treinamentos personalizados para o desenvolvimento profissional.",
+                examples: [
+                    "Plataformas que sugerem cursos baseados nas necessidades específicas da empresa",
+                    "Análise de desempenho para identificar áreas de desenvolvimento individual",
+                    "Microlearning adaptativo durante o fluxo de trabalho",
+                    "Recomendações de conteúdo baseadas em tendências do mercado"
+                ]
+            },
+            {
+                title: "Colaboração Aprimorada por IA",
+                icon: "👥",
+                category: "efficiency",
+                description: "Ferramentas inteligentes facilitam o trabalho em equipe e a comunicação entre departamentos.",
+                examples: [
+                    "Tradução em tempo real em videoconferências internacionais",
+                    "Sistemas que sugerem especialistas internos para projetos específicos",
+                    "Ferramentas de brainstorming assistido por IA com sugestões criativas",
+                    "Plataformas de colaboração que organizam automaticamente contribuições"
+                ]
+            },
+            {
+                title: "Análise Preditiva para Planejamento",
+                icon: "🔮",
+                category: "efficiency",
+                description: "IA prevê tendências e resultados, permitindo planejamento mais preciso e estratégico.",
+                examples: [
+                    "Previsão de vendas baseada em dados históricos e fatores externos",
+                    "Antecipação de necessidades de manutenção em equipamentos industriais",
+                    "Análise de risco em projetos e investimentos corporativos",
+                    "Projeção de cenários para tomada de decisão estratégica"
+                ]
+            }
+        ];
+
+        // Variáveis de controle
+        let currentCardIndex = 0;
+        let currentCategory = "all";
+        const cardsPerView = getCardsPerView();
+
+        // Inicializar a apresentação
+        function initPresentation() {
+            renderCards();
+            updateProgressBar();
+            updateCardCount();
+            setupEventListeners();
+        }
+
+        // Determinar quantos cards mostrar com base no tamanho da tela
+        function getCardsPerView() {
+            if (window.innerWidth < 768) return 1;
+            if (window.innerWidth < 1200) return 2;
+            return 3;
+        }
+
+        // Filtrar cards por categoria
+        function getFilteredCards() {
+            if (currentCategory === "all") return cardsData;
+            return cardsData.filter(card => card.category === currentCategory);
+        }
+
+        // Renderizar os cards
+        function renderCards() {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+            
+            const filteredCards = getFilteredCards();
+            
+            // Calcular índices dos cards a serem mostrados
+            const startIndex = Math.max(0, currentCardIndex);
+            const endIndex = Math.min(filteredCards.length, currentCardIndex + cardsPerView);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const cardData = filteredCards[i];
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                // Verificar se existem exemplos para mostrar
+                const examplesHTML = cardData.examples ? 
+                    `<div class="example-list">
+                        <strong>Exemplos:</strong>
+                        <ul>
+                            ${cardData.examples.map(example => `<li>${example}</li>`).join('')}
+                        </ul>
+                    </div>` : '';
+                
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-icon">${cardData.icon}</div>
+                            <div class="card-title">${cardData.title}</div>
+                            <p>Clique para virar</p>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-content">
+                                <div class="card-title">${cardData.title}</div>
+                                <div class="card-description">${cardData.description}</div>
+                                ${examplesHTML}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Adicionar evento de clique para virar o card
+                card.addEventListener('click', function() {
+                    this.classList.toggle('flipped');
+                });
+                
+                container.appendChild(card);
+            }
+            
+            updateCardCount();
+        }
+
+        // Atualizar a barra de progresso
+        function updateProgressBar() {
+            const progress = document.getElementById('progress');
+            const filteredCards = getFilteredCards();
+            const percentage = ((currentCardIndex + cardsPerView) / filteredCards.length) * 100;
+            progress.style.width = Math.min(percentage, 100) + '%';
+        }
+
+        // Atualizar o contador de cards
+        function updateCardCount() {
+            const countElement = document.getElementById('card-count');
+            const filteredCards = getFilteredCards();
+            const currentPage = Math.floor(currentCardIndex / cardsPerView) + 1;
+            const totalPages = Math.ceil(filteredCards.length / cardsPerView);
+            
+            countElement.textContent = `Página ${currentPage} de ${totalPages} - ${filteredCards.length} cards no total`;
+        }
+
+        // Configurar os event listeners
+        function setupEventListeners() {
+            document.getElementById('next-btn').addEventListener('click', nextCards);
+            document.getElementById('prev-btn').addEventListener('click', previousCards);
+            document.getElementById('reset-btn').addEventListener('click', resetPresentation);
+            
+            // Event listeners para os botões de categoria
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.getAttribute('data-category');
+                    currentCardIndex = 0;
+                    renderCards();
+                    updateProgressBar();
+                });
+            });
+            
+            // Atualizar layout quando a janela for redimensionada
+            window.addEventListener('resize', function() {
+                currentCardIndex = 0;
+                renderCards();
+                updateProgressBar();
+            });
+        }
+
+        // Navegar para os próximos cards
+        function nextCards() {
+            const filteredCards = getFilteredCards();
+            if (currentCardIndex + cardsPerView < filteredCards.length) {
+                currentCardIndex += cardsPerView;
+                renderCards();
+                updateProgressBar();
+            }
+        }
+
+        // Navegar para os cards anteriores
+        function previousCards() {
+            if (currentCardIndex - cardsPerView >= 0) {
+                currentCardIndex -= cardsPerView;
+            } else {
+                currentCardIndex = 0;
+            }
+            renderCards();
+            updateProgressBar();
+        }
+
+        // Reiniciar a apresentação
+        function resetPresentation() {
+            currentCardIndex = 0;
+            renderCards();
+            updateProgressBar();
+        }
+
+        // Inicializar quando o documento estiver carregado
+        document.addEventListener('DOMContentLoaded', initPresentation);
+    </script>
+</body>
+</html>
