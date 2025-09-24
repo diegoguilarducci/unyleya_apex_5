@@ -184,6 +184,20 @@
             margin-bottom: 15px;
         }
         
+        .expert-info {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+        
+        .reference {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
         .example-list {
             text-align: left;
             margin-top: 10px;
@@ -306,7 +320,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>IA na Aprendizagem e Eficiência</h1>
+        <h1>A Inteligência Artificial (IA) como ferramenta de aprendizagem e aumento de eficiência</h1>
         <p class="subtitle">Clique nos cards para descobrir como a IA transforma a educação e o trabalho</p>
         
         <div class="category-selector">
@@ -314,6 +328,7 @@
             <button class="category-btn" data-category="definicao">Inteligência Artificial (IA)</button>
             <button class="category-btn" data-category="education">IA na Educação</button>
             <button class="category-btn" data-category="efficiency">IA para Eficiência</button>
+            <button class="category-btn" data-category="opinions">Opiniões de Especialistas</button>
         </div>
         
         <div class="progress-bar">
@@ -519,6 +534,64 @@
                     "Análise de risco em projetos e investimentos corporativos",
                     "Projeção de cenários para tomada de decisão estratégica"
                 ]
+            },
+            
+            // Cartões sobre Opiniões de Especialistas
+            {
+                title: "Andrew Ng - Visão Otimista",
+                icon: "🌟",
+                category: "opinions",
+                description: "\"Assim como a eletricidade transformou quase tudo há 100 anos, hoje eu dificilmente consigo pensar em uma indústria que não será transformada pela IA nos próximos anos. A IA é a nova eletricidade.\"",
+                expertInfo: "Co-fundador do Coursera; ex-chefe de IA do Baidu; Professor de Stanford",
+                reference: "Ng, A. (2017). 'AI is the New Electricity'. Congresso de IA da Stanford GSB."
+            },
+            {
+                title: "Kai-Fu Lee - Potencial Transformador",
+                icon: "💡",
+                category: "opinions",
+                description: "\"A IA é indiscutivelmente a tecnologia mais importante do mundo hoje. Ela já está criando um valor econômico colossal e irá reestruturar todas as indústrias... A IA nos libertará de trabalhos repetitivos.\"",
+                expertInfo: "CEO da Sinovation Ventures; autor de 'AI Superpowers'",
+                reference: "Lee, K. (2018). AI Superpowers: China, Silicon Valley, and the New World Order."
+            },
+            {
+                title: "Erik Brynjolfsson - Oportunidade Histórica",
+                icon: "📈",
+                category: "opinions",
+                description: "\"Esta é a maior oportunidade para melhorar vidas que já tivemos... O desafio não é a tecnologia, mas reinventar nossos processos empresariais, nossas habilidades e nossas instituições sociais.\"",
+                expertInfo: "Professor do MIT; Diretor da Iniciativa sobre Economia Digital",
+                reference: "Brynjolfsson, E., & McAfee, A. (2014). The Second Machine Age."
+            },
+            {
+                title: "Nick Bostrom - Riscos Existenciais",
+                icon: "⚠️",
+                category: "opinions",
+                description: "\"O surgimento da superinteligência será o evento mais importante da história da humanidade. E pode ser o último – a menos que aprendamos a alinhar os objetivos da superinteligência com os nossos.\"",
+                expertInfo: "Professor de Oxford; Diretor do Instituto para o Futuro da Humanidade",
+                reference: "Bostrom, N. (2014). Superintelligence: Paths, Dangers, Strategies."
+            },
+            {
+                title: "Joy Buolamwini - Viés Algorítmico",
+                icon: "⚖️",
+                category: "opinions",
+                description: "\"A ascensão da automação pode ser uma força para a equidade ou para a desigualdade. Atualmente, estamos codificando a desigualdade em nossos sistemas. Se não abordarmos os vieses na IA, arriscamos a ampliação da discriminação em escala industrial.\"",
+                expertInfo: "Fundadora do Algorithmic Justice League; Pesquisadora do MIT Media Lab",
+                reference: "Buolamwini, J. (2016). 'Gender Shades: Intersectional Accuracy Disparities'."
+            },
+            {
+                title: "Yuval Noah Harari - Ditaduras Digitais",
+                icon: "👁️",
+                category: "opinions",
+                description: "\"Os algoritmos podem me conhecer melhor do que eu me conheço. E uma vez que os algoritmos me conhecem, eles podem manipular meus sentimentos... O maior perigo é o surgimento de ditaduras digitais, que podem monitorar todos o tempo todo.\"",
+                expertInfo: "Historiador e Filósofo; autor de 'Sapiens' e '21 Lições para o Século 21'",
+                reference: "Harari, Y. N. (2018). 21 Lessons for the 21st Century."
+            },
+            {
+                title: "Stuart Russell - Controle e Alinhamento",
+                icon: "🎯",
+                category: "opinions",
+                description: "\"Precisamos de uma reformulação fundamental da IA... Se o objetivo não for perfeitamente alinhado com os verdadeiros valores humanos – que são complexos e difíceis de definir –, o resultado pode ser desastroso.\"",
+                expertInfo: "Professor de Ciência da Computação da UC Berkeley",
+                reference: "Russell, S. (2019). Human Compatible: Artificial Intelligence and the Problem of Control."
             }
         ];
 
@@ -573,6 +646,13 @@
                         </ul>
                     </div>` : '';
                 
+                // Verificar se é um card de opinião de especialista
+                const expertInfoHTML = cardData.expertInfo ? 
+                    `<div class="expert-info">${cardData.expertInfo}</div>` : '';
+                
+                const referenceHTML = cardData.reference ? 
+                    `<div class="reference">Referência: ${cardData.reference}</div>` : '';
+                
                 card.innerHTML = `
                     <div class="card-inner">
                         <div class="card-front">
@@ -584,6 +664,8 @@
                             <div class="card-content">
                                 <div class="card-title">${cardData.title}</div>
                                 <div class="card-description">${cardData.description}</div>
+                                ${expertInfoHTML}
+                                ${referenceHTML}
                                 ${examplesHTML}
                             </div>
                         </div>
