@@ -40,14 +40,13 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            padding: 60px 20px 100px; /* Aumentei o padding inferior para 100px */
+            padding: 60px;
             display: none;
             flex-direction: column;
-            justify-content: flex-start; /* Alterado para flex-start para permitir scroll */
+            justify-content: center;
             align-items: center;
             text-align: center;
             transition: transform 0.5s ease;
-            overflow-y: auto; /* Adicionado para permitir scroll quando necessário */
         }
 
         .tela.ativa {
@@ -69,7 +68,29 @@
             margin: 20px 0;
             max-width: 800px;
             text-align: left;
-            width: 100%; /* Adicionado para garantir que o card ocupe toda a largura disponível */
+            max-height: 80vh; /* Limita a altura máxima do card */
+            overflow-y: auto; /* Adiciona rolagem vertical quando necessário */
+            scrollbar-width: thin; /* Para Firefox */
+            scrollbar-color: var(--azul-medio) var(--cinza-claro); /* Para Firefox */
+        }
+
+        /* Estilizando a barra de rolagem para Webkit (Chrome, Safari, Edge) */
+        .card::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .card::-webkit-scrollbar-track {
+            background: var(--cinza-claro);
+            border-radius: 10px;
+        }
+
+        .card::-webkit-scrollbar-thumb {
+            background: var(--azul-medio);
+            border-radius: 10px;
+        }
+
+        .card::-webkit-scrollbar-thumb:hover {
+            background: #357ABD;
         }
 
         .botao {
@@ -93,21 +114,15 @@
             margin-bottom: 20px;
         }
 
-        /* NAVEGAÇÃO - MELHORIAS PARA MOBILE */
+        /* NAVEGAÇÃO */
         .navegacao {
             position: fixed;
-            bottom: 20px; /* Aumentei de 30px para 20px para dar mais espaço */
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             gap: 15px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.9); /* Fundo semi-transparente */
-            padding: 10px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            width: auto;
-            max-width: 90%; /* Limita a largura máxima */
         }
 
         .contador-telas {
@@ -126,7 +141,6 @@
         .tela-capa {
             background: linear-gradient(135deg, var(--azul-escuro), var(--azul-medio));
             color: var(--branco);
-            justify-content: center; /* Mantém centralizado na capa */
         }
 
         .tela-biblia {
@@ -204,92 +218,23 @@
             border-color: var(--verde);
         }
 
-        /* RESPONSIVO - MELHORIAS PARA MOBILE */
+        /* RESPONSIVO */
         @media (max-width: 768px) {
             .tela {
-                padding: 20px 15px 90px; /* Ajuste do padding para mobile */
-                justify-content: flex-start;
+                padding: 20px;
             }
             
             .card {
                 padding: 20px;
-                margin: 10px 0;
+                max-height: 75vh; /* Ajusta a altura máxima para mobile */
             }
             
             .grid-exemplos {
                 grid-template-columns: 1fr;
-                gap: 15px;
-                margin: 20px 0;
             }
             
             .navegacao {
-                bottom: 15px;
-                padding: 8px;
-                gap: 10px;
-                width: 95%; /* Ocupa quase toda a largura */
-            }
-            
-            .botao {
-                padding: 10px 15px;
-                font-size: 14px;
-                margin: 5px;
-            }
-            
-            .plataformas-lista {
-                gap: 10px;
-            }
-            
-            .plataforma-item {
-                min-width: 120px;
-                padding: 12px;
-                font-size: 14px;
-            }
-            
-            .contador-telas {
-                top: 10px;
-                right: 10px;
-                font-size: 12px;
-                padding: 6px 12px;
-            }
-            
-            /* Ajustes de texto para mobile */
-            h1 {
-                font-size: 2em !important;
-            }
-            
-            h2 {
-                font-size: 1.5em;
-            }
-            
-            p, li {
-                font-size: 0.9em;
-            }
-            
-            .citacao-biblia {
-                font-size: 16px;
-                padding: 15px;
-            }
-        }
-
-        /* Ajustes para telas muito pequenas */
-        @media (max-width: 480px) {
-            .navegacao {
-                flex-direction: column;
-                align-items: center;
-                width: 90%;
-            }
-            
-            .botao {
-                width: 100%;
-                max-width: 200px;
-            }
-            
-            h1 {
-                font-size: 1.7em !important;
-            }
-            
-            .icone {
-                font-size: 36px;
+                bottom: 10px;
             }
         }
     </style>
@@ -324,32 +269,32 @@
             </div>
         </div>
 
-  <!-- TELA 3 - CONEXÃO BÍBLICA 1 -->
-<div class="tela tela-biblia" id="tela3">
-    <div class="card">
-        <header class="card-header">
-            <h2>Conectando a Bíblia com a IA</h2>
-        </header>
-        
-        <div class="card-content">
-            <div class="citacao-biblia">
-                <blockquote>
-                    <p>"Porque o Senhor dá a sabedoria; da sua boca é que vem o conhecimento e o entendimento."</p>
-                    <footer><strong>Provérbios 2:6</strong></footer>
-                </blockquote>
+        <!-- TELA 3 - CONEXÃO BÍBLICA 1 -->
+        <div class="tela tela-biblia" id="tela3">
+            <div class="card">
+                <header class="card-header">
+                    <h2>Conectando a Bíblia com a IA</h2>
+                </header>
                 
-                <blockquote>
-                    <p>"E Deus os abençoou, e Deus lhes disse: Frutificai e multiplicai-vos, e enchei a terra, e sujeitai-a; e dominai sobre os peixes do mar e sobre as aves dos céus, e sobre todo o animal que se move sobre a terra."</p>
-                    <footer><strong>Gênesis 1:28</strong></footer>
-                </blockquote>
-            </div>
-            
-            <div class="reflexao">
-                <p>Então, se todo conhecimento vem de Deus e fomos chamados para administrar bem a criação, a IA também se encaixa nisso. Ela é uma ferramenta poderosa, assim como um martelo ou uma caneta. A questão não é a ferramenta em si, mas como e por que a usamos.</p>
+                <div class="card-content">
+                    <div class="citacao-biblia">
+                        <blockquote>
+                            <p>"Porque o Senhor dá a sabedoria; da sua boca é que vem o conhecimento e o entendimento."</p>
+                            <footer><strong>Provérbios 2:6</strong></footer>
+                        </blockquote>
+                        
+                        <blockquote>
+                            <p>"E Deus os abençoou, e Deus lhes disse: Frutificai e multiplicai-vos, e enchei a terra, e sujeitai-a; e dominai sobre os peixes do mar e sobre as aves dos céus, e sobre todo o animal que se move sobre a terra."</p>
+                            <footer><strong>Gênesis 1:28</strong></footer>
+                        </blockquote>
+                    </div>
+                    
+                    <div class="reflexao">
+                        <p>Então, se todo conhecimento vem de Deus e fomos chamados para administrar bem a criação, a IA também se encaixa nisso. Ela é uma ferramenta poderosa, assim como um martelo ou uma caneta. A questão não é a ferramenta em si, mas como e por que a usamos.</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
         <!-- TELA 4 - CONEXÃO BÍBLICA 2 -->
         <div class="tela tela-biblia" id="tela4">
@@ -495,41 +440,41 @@
             </div>
         </div>
 
-        <!-- TELA 11 - PLATAFORMAS GRATUITAS -->
-        <div class="tela" id="tela11">
-            <div class="card">
-                <h2>Principais Plataformas Gratuitas de IA</h2>
-                <div class="plataformas-lista">
-                    <div class="plataforma-item">
-                        <h3>DeepSeek</h3>
-                        <p>Assistente conversacional completo e gratuito</p>
-                    </div>
-                    <div class="plataforma-item">
-                        <h3>ChatGPT</h3>
-                        <p>Versão gratuita do OpenAI (GPT-3.5)</p>
-                    </div>
-                    <div class="plataforma-item">
-                        <h3>Google Gemini</h3>
-                        <p>Assistente do Google com busca integrada</p>
-                    </div>
-                    <div class="plataforma-item">
-                        <h3>Microsoft Copilot</h3>
-                        <p>Baseado no GPT-4 com acesso gratuito</p>
-                    </div>
-                    <div class="plataforma-item">
-                        <h3>Claude</h3>
-                        <p>Plano gratuito robusto para documentos longos</p>
-                    </div>
-                    <div class="plataforma-item plataforma-destaque">
-                        <h3>7chat.ai</h3>
-                        <p>IA adventista com foco teológico e doutrinário</p>
-                    </div>
-                </div>
-                <div style="margin-top: 20px; padding: 15px; background: #FFF3CD; border-radius: 8px;">
-                    <small><strong>Nota sobre o 7chat.ai:</strong> Desenvolvido pela Igreja Adventista para suporte bíblico, doutrinário e espiritual. Possui limitações e recomenda-se verificar informações com fontes oficiais.</small>
-                </div>
+<!-- TELA 11 - PLATAFORMAS GRATUITAS -->
+<div class="tela" id="tela11">
+    <div class="card">
+        <h2>Principais Plataformas Gratuitas de IA</h2>
+        <div class="plataformas-lista">
+            <div class="plataforma-item">
+                <h3><a href="https://www.deepseek.com" target="_blank" style="color: inherit; text-decoration: none;">DeepSeek</a></h3>
+                <p>Assistente conversacional completo e gratuito</p>
+            </div>
+            <div class="plataforma-item">
+                <h3><a href="https://chat.openai.com" target="_blank" style="color: inherit; text-decoration: none;">ChatGPT</a></h3>
+                <p>Versão gratuita do OpenAI (GPT-3.5)</p>
+            </div>
+            <div class="plataforma-item">
+                <h3><a href="https://gemini.google.com" target="_blank" style="color: inherit; text-decoration: none;">Google Gemini</a></h3>
+                <p>Assistente do Google com busca integrada</p>
+            </div>
+            <div class="plataforma-item">
+                <h3><a href="https://copilot.microsoft.com" target="_blank" style="color: inherit; text-decoration: none;">Microsoft Copilot</a></h3>
+                <p>Baseado no GPT-4 com acesso gratuito</p>
+            </div>
+            <div class="plataforma-item">
+                <h3><a href="https://claude.ai" target="_blank" style="color: inherit; text-decoration: none;">Claude</a></h3>
+                <p>Plano gratuito robusto para documentos longos</p>
+            </div>
+            <div class="plataforma-item plataforma-destaque">
+                <h3><a href="https://7chat.ai" target="_blank" style="color: inherit; text-decoration: none;">7chat.ai</a></h3>
+                <p>IA adventista com foco teológico e doutrinário</p>
             </div>
         </div>
+        <div style="margin-top: 20px; padding: 15px; background: #FFF3CD; border-radius: 8px;">
+            <small><strong>Nota sobre o 7chat.ai:</strong> Desenvolvido pela Igreja Adventista para suporte bíblico, doutrinário e espiritual. Possui limitações e recomenda-se verificar informações com fontes oficiais.</small>
+        </div>
+    </div>
+</div>
 
         <!-- TELA 12 - RESPONSABILIDADE -->
         <div class="tela" id="tela12">
@@ -609,9 +554,6 @@
             // Atualizar contador
             document.getElementById('contador').textContent = `${telaAtual}/${totalTelas}`;
             document.getElementById('numero-tela').textContent = telaAtual;
-            
-            // Scroll para o topo ao mudar de tela
-            novaTela.scrollTop = 0;
         }
 
         // NAVEGAÇÃO POR TECLADO
