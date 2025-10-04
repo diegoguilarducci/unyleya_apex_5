@@ -3,760 +3,559 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA na Aprendizagem e Eficiência - Cards Interativos</title>
+    <title>IA como Ferramenta de Aprendizagem</title>
     <style>
+        /* ESTILOS GLOBAIS */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
         }
-        
+
+        :root {
+            --azul-escuro: #1E2A3A;
+            --azul-medio: #4A90E2;
+            --verde: #27AE60;
+            --cinza-claro: #F5F7FA;
+            --branco: #FFFFFF;
+            --cinza-medio: #718096;
+        }
+
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            color: #333;
+            background: var(--cinza-claro);
+            overflow: hidden;
         }
-        
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            text-align: center;
-        }
-        
-        h1 {
-            color: white;
-            margin: 20px 0;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .subtitle {
-            color: #f0f0f0;
-            margin-bottom: 30px;
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.5;
-        }
-        
-        .category-selector {
-            margin: 20px 0;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .category-btn {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid white;
-            border-radius: 25px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-        
-        .category-btn.active {
-            background-color: white;
-            color: #1a2a6c;
-            font-weight: bold;
-        }
-        
-        .category-btn:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .cards-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 30px;
-            min-height: 450px;
-        }
-        
-        .card {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            height: 400px;
-            perspective: 1000px;
-            cursor: pointer;
-            transition: transform 0.3s;
-            flex-shrink: 0;
-        }
-        
-        .card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .card-inner {
+
+        /* CONTAINER PRINCIPAL */
+        .apresentacao-container {
+            width: 100vw;
+            height: 100vh;
             position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
+            overflow: hidden;
         }
-        
-        .card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-        
-        .card-front, .card-back {
+
+        /* TELAS */
+        .tela {
             position: absolute;
             width: 100%;
             height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            padding: 20px;
-            display: flex;
+            padding: 60px;
+            display: none;
             flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .card-front {
-            background-color: white;
-            color: #333;
             justify-content: center;
             align-items: center;
-        }
-        
-        .card-back {
-            background-color: #1a2a6c;
-            color: white;
-            transform: rotateY(180deg);
-            text-align: left;
-        }
-        
-        .card-content {
-            height: 100%;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        
-        /* Custom scrollbar para o card-back */
-        .card-content::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .card-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-        
-        .card-content::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-        }
-        
-        .card-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-        
-        .card-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            color: #1a2a6c;
-        }
-        
-        .card-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            font-weight: bold;
             text-align: center;
+            transition: transform 0.5s ease;
         }
-        
-        .card-description {
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-        
-        .expert-info {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 0.9rem;
-            font-style: italic;
-        }
-        
-        .reference {
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .example-list {
-            text-align: left;
-            margin-top: 10px;
-        }
-        
-        .example-list strong {
-            display: block;
-            margin-bottom: 10px;
-        }
-        
-        .example-list ul {
-            padding-left: 20px;
-        }
-        
-        .example-list li {
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        
-        .navigation {
+
+        .tela.ativa {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+            animation: slideIn 0.5s ease;
         }
-        
-        button {
-            background-color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            min-width: 120px;
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-        
-        button:hover {
-            background-color: #1a2a6c;
-            color: white;
-            transform: translateY(-3px);
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 5px;
+
+        /* COMPONENTES REUTILIZÁVEIS */
+        .card {
+            background: var(--branco);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             margin: 20px 0;
-            overflow: hidden;
             max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            text-align: left;
         }
-        
-        .progress {
-            height: 100%;
-            background-color: white;
-            width: 0%;
-            transition: width 0.5s;
+
+        .botao {
+            background: var(--azul-medio);
+            color: var(--branco);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 10px;
         }
-        
-        .card-count {
-            color: white;
+
+        .botao:hover {
+            background: #357ABD;
+        }
+
+        .icone {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        /* NAVEGAÇÃO */
+        .navegacao {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .contador-telas {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--azul-escuro);
+            color: var(--branco);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        /* ESTILOS ESPECÍFICOS POR TELA */
+        .tela-capa {
+            background: linear-gradient(135deg, var(--azul-escuro), var(--azul-medio));
+            color: var(--branco);
+        }
+
+        .tela-biblia {
+            background: var(--cinza-claro);
+        }
+
+        .citacao-biblia {
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+            font-size: 18px;
+            color: var(--azul-escuro);
+            margin: 20px 0;
+            padding: 20px;
+            border-left: 4px solid var(--verde);
+            background: var(--branco);
+        }
+
+        .lista-ia {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .lista-ia li {
             margin: 10px 0;
-            font-size: 0.9rem;
+            padding-left: 10px;
         }
-        
+
+        /* GRID DE EXEMPLOS */
+        .grid-exemplos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .exemplo-card {
+            background: var(--branco);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .exemplo-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* PLATAFORMAS */
+        .plataformas-lista {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .plataforma-item {
+            background: var(--branco);
+            padding: 15px;
+            border-radius: 8px;
+            min-width: 150px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .plataforma-item:hover {
+            border-color: var(--azul-medio);
+        }
+
+        .plataforma-destaque {
+            background: var(--verde);
+            color: var(--branco);
+            font-weight: bold;
+            border-color: var(--verde);
+        }
+
+        /* RESPONSIVO */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-                padding: 0 10px;
-            }
-            
-            .category-selector {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .category-btn {
-                width: 90%;
-                max-width: 300px;
-            }
-            
-            .cards-container {
-                gap: 20px;
+            .tela {
+                padding: 20px;
             }
             
             .card {
-                width: 100%;
-                max-width: 300px;
+                padding: 20px;
             }
             
-            .navigation {
-                flex-direction: column;
-                align-items: center;
+            .grid-exemplos {
+                grid-template-columns: 1fr;
             }
             
-            button {
-                width: 200px;
+            .navegacao {
+                bottom: 10px;
             }
-        }
-        
-        .footer {
-            color: white;
-            margin-top: 30px;
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 0 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>A Inteligência Artificial (IA) como ferramenta de aprendizagem e aumento de eficiência</h1>
-        <p class="subtitle">Clique nos cards para descobrir como a IA transforma a educação e o trabalho</p>
+    <div class="apresentacao-container">
         
-        <div class="category-selector">
-            <button class="category-btn active" data-category="all">Todos os Temas</button>
-            <button class="category-btn" data-category="definicao">Inteligência Artificial (IA)</button>
-            <button class="category-btn" data-category="education">IA na Educação</button>
-            <button class="category-btn" data-category="efficiency">IA para Eficiência</button>
-            <button class="category-btn" data-category="opinions">Opiniões de Especialistas</button>
+        <!-- CONTADOR DE TELAS -->
+        <div class="contador-telas" id="contador">1/13</div>
+
+        <!-- TELA 1 - CAPA -->
+        <div class="tela tela-capa ativa" id="tela1">
+            <h1 style="font-size: 3em; margin-bottom: 20px;">A Inteligência Artificial como Ferramenta de Aprendizagem e Aumento de Eficiência</h1>
+            <p style="font-size: 1.5em; opacity: 0.9;">Culto Jovem - IASD Tancredo Neves</p>
+            <div style="font-size: 80px; margin-top: 40px;">🧠</div>
         </div>
-        
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
+
+        <!-- TELA 2 - DEFINIÇÃO IA -->
+        <div class="tela" id="tela2">
+            <div class="card">
+                <div class="icone">🤖</div>
+                <h2>Definição de Inteligência Artificial (IA)</h2>
+                <p>IA é a capacidade de máquinas ou sistemas computacionais de realizar tarefas que normalmente requerem inteligência humana</p>
+                <ul class="lista-ia">
+                    <li>🧠 Raciocínio</li>
+                    <li>🎓 Aprendizado</li>
+                    <li>👁️ Percepção</li>
+                    <li>🔍 Reconhecimento de padrões</li>
+                    <li>⚖️ Tomada de decisão</li>
+                    <li>💬 Compreensão de linguagem natural</li>
+                </ul>
+            </div>
         </div>
+
+  <!-- TELA 3 - CONEXÃO BÍBLICA 1 -->
+<div class="tela tela-biblia" id="tela3">
+    <div class="card">
+        <header class="card-header">
+            <h2>Conectando a Bíblia com a IA</h2>
+        </header>
         
-        <div class="card-count" id="card-count"></div>
-        
-        <div class="cards-container" id="cards-container">
-            <!-- Os cards serão inseridos aqui via JavaScript -->
+        <div class="card-content">
+            <div class="citacao-biblia">
+                <blockquote>
+                    <p>"Porque o Senhor dá a sabedoria; da sua boca é que vem o conhecimento e o entendimento."</p>
+                    <footer><strong>Provérbios 2:6</strong></footer>
+                </blockquote>
+                
+                <blockquote>
+                    <p>"E Deus os abençoou, e Deus lhes disse: Frutificai e multiplicai-vos, e enchei a terra, e sujeitai-a; e dominai sobre os peixes do mar e sobre as aves dos céus, e sobre todo o animal que se move sobre a terra."</p>
+                    <footer><strong>Gênesis 1:28</strong></footer>
+                </blockquote>
+            </div>
+            
+            <div class="reflexao">
+                <p>Então, se todo conhecimento vem de Deus e fomos chamados para administrar bem a criação, a IA também se encaixa nisso. Ela é uma ferramenta poderosa, assim como um martelo ou uma caneta. A questão não é a ferramenta em si, mas como e por que a usamos.</p>
+            </div>
         </div>
-        
-        <div class="navigation">
-            <button id="prev-btn">Anterior</button>
-            <button id="next-btn">Próximo</button>
-            <button id="reset-btn">Reiniciar</button>
+    </div>
+</div>
+
+        <!-- TELA 4 - CONEXÃO BÍBLICA 2 -->
+        <div class="tela tela-biblia" id="tela4">
+            <div class="card">
+                <h2>Por que usar a IA?</h2>
+                <p>A Parábola dos Talentos (Mateus 25:14-30) nos ensina a ser bons administradores do que Deus nos deu. Isso inclui o nosso tempo e nossos dons. A IA pode nos ajudar a ser mais eficientes, nos liberando tempo e energia para o que realmente importa.</p>
+                <div class="grid-exemplos">
+                    <div class="exemplo-card">
+                        <div style="font-size: 40px;">⏰</div>
+                        <h3>Tempo</h3>
+                        <p>Automatizando tarefas repetitivas e organizando nossa agenda</p>
+                    </div>
+                    <div class="exemplo-card">
+                        <div style="font-size: 40px;">🎁</div>
+                        <h3>Dons</h3>
+                        <p>Potencializa nossos talentos e habilidades únicas</p>
+                    </div>
+                    <div class="exemplo-card">
+                        <div style="font-size: 40px;">⚡</div>
+                        <h3>Eficiência</h3>
+                        <p>Ajuda no planejamento de projetos e tomada de decisões</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="footer">
-            Apresentação sobre IA na Aprendizagem - Desenvolvida com HTML, CSS e JavaScript
+
+        <!-- TELA 5 - EXEMPLOS: ASSISTENTES PESSOAIS -->
+        <div class="tela" id="tela5">
+            <div class="card">
+                <h2>Exemplo de Uso da IA: Assistentes Pessoais</h2>
+                <div class="grid-exemplos">
+                    <div class="exemplo-card">
+                        <h3>🤖 Chatbots</h3>
+                        <p>Sistemas que atendem clientes 24/7, respondem perguntas frequentes e solucionam problemas básicos</p>
+                        <small><strong>Exemplo:</strong> Chatbot de banco que ajuda a bloquear cartão, consultar saldo ou explicar taxas</small>
+                    </div>
+                    <div class="exemplo-card">
+                        <h3>🎤 Assistentes de Voz</h3>
+                        <p>Reconhecem comandos de voz e executam tarefas automaticamente</p>
+                        <small><strong>Exemplo:</strong> Alexa (Amazon), Google Assistant e Siri (Apple) tocam música, controlam luzes inteligentes, fazem lembretes</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 6 - EXEMPLOS: SAÚDE -->
+        <div class="tela" id="tela6">
+            <div class="card">
+                <h2>Exemplo de Uso da IA: Saúde e Medicina</h2>
+                <div class="grid-exemplos">
+                    <div class="exemplo-card">
+                        <h3>🩺 Diagnóstico por Imagem</h3>
+                        <p>Algoritmos analisam imagens médicas com alta precisão para detectar doenças</p>
+                        <small><strong>Exemplo:</strong> IA que identifica tumores em mamografias ou sinais de retinopatia diabética em exames de fundo de olho</small>
+                    </div>
+                    <div class="exemplo-card">
+                        <h3>💊 Descoberta de Medicamentos</h3>
+                        <p>Acelera o processo de pesquisa e desenvolvimento de novos fármacos</p>
+                        <small><strong>Exemplo:</strong> IA foi crucial durante a pandemia para analisar dados e identificar compostos para tratar COVID-19</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 7 - EXEMPLOS: ENTRETENIMENTO -->
+        <div class="tela" id="tela7">
+            <div class="card">
+                <h2>Exemplo de Uso da IA: Entretenimento e Conteúdo</h2>
+                <div class="grid-exemplos">
+                    <div class="exemplo-card">
+                        <h3>🎬 Sistemas de Recomendação</h3>
+                        <p>Algoritmos que sugerem conteúdo com base no seu comportamento e preferências</p>
+                        <small><strong>Exemplo:</strong> Netflix recomenda filmes, Spotify cria playlists personalizadas, YouTube sugere vídeos</small>
+                    </div>
+                    <div class="exemplo-card">
+                        <h3>🎨 Geração de Conteúdo</h3>
+                        <p>Cria textos, imagens, músicas e vídeos a partir de instruções textuais (prompts)</p>
+                        <small><strong>Exemplo:</strong> ChatGPT (texto), DALL-E e Midjourney (imagens), Suno (música)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 8 - EXEMPLOS: TRANSPORTE -->
+        <div class="tela" id="tela8">
+            <div class="card">
+                <h2>Exemplo de Uso da IA: Transporte e Mobilidade</h2>
+                <div class="grid-exemplos">
+                    <div class="exemplo-card">
+                        <h3>🚗 Carros Autônomos</h3>
+                        <p>Veículos que usam sensores, câmeras e IA para navegar sem intervenção humana</p>
+                        <small><strong>Exemplo:</strong> Tesla, Waymo (Google) e outras montadoras com piloto automático avançado</small>
+                    </div>
+                    <div class="exemplo-card">
+                        <h3>🗺️ Otimização de Tráfego</h3>
+                        <p>Sistemas que analisam o fluxo de veículos para reduzir congestionamentos</p>
+                        <small><strong>Exemplo:</strong> Waze e Google Maps calculam rotas mais rápidas em tempo real</small>
+                    </div>
+                    <div class="exemplo-card">
+                        <h3>📦 Logística e Entregas</h3>
+                        <p>Otimiza rotas de entrega e gerencia frotas de veículos</p>
+                        <small><strong>Exemplo:</strong> Amazon usa IA para definir melhores rotas para caminhões e drones</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 9 - EXEMPLOS: VAREJO -->
+        <div class="tela" id="tela9">
+            <div class="card">
+                <h2>Exemplo de Uso da IA: Varejo e E-commerce</h2>
+                <div class="grid-exemplos">
+                    <div class="exemplo-card">
+                        <h3>🛍️ Experiência Personalizada</h3>
+                        <p>Sites mostram produtos diferentes para cada usuário baseado no histórico</p>
+                        <small><strong>Exemplo:</strong> Amazon exibe "produtos que você pode gostar"</small>
+                    </div>
+                    <div class="exemplo-card">
+                        <h3>📊 Gestão de Estoque</h3>
+                        <p>Previsão de demanda para evitar falta ou excesso de produtos</p>
+                        <small><strong>Exemplo:</strong> Sistemas analisam tendências de vendas e sazonalidade</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 10 - EXEMPLOS: EDUCAÇÃO -->
+        <div class="tela" id="tela10">
+            <div class="card">
+                <h2>Exemplo de Uso da IA: Educação</h2>
+                <div class="grid-exemplos">
+                    <div class="exemplo-card">
+                        <h3>🎓 Ensino Personalizado</h3>
+                        <p>Plataformas adaptam conteúdo e ritmo de aprendizado para cada aluno</p>
+                        <small><strong>Exemplo:</strong> Khan Academy e plataformas online sugerem exercícios baseados no desempenho</small>
+                    </div>
+                    <div class="exemplo-card">
+                        <h3>🛠️ Ferramentas de Apoio</h3>
+                        <p>Auxiliam na correção de tarefas, geração de material didático e suporte aos alunos</p>
+                        <small><strong>Exemplo:</strong> Professores usando ChatGPT para criar questões ou alunos tirando dúvidas</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 11 - PLATAFORMAS GRATUITAS -->
+        <div class="tela" id="tela11">
+            <div class="card">
+                <h2>Principais Plataformas Gratuitas de IA</h2>
+                <div class="plataformas-lista">
+                    <div class="plataforma-item">
+                        <h3>DeepSeek</h3>
+                        <p>Assistente conversacional completo e gratuito</p>
+                    </div>
+                    <div class="plataforma-item">
+                        <h3>ChatGPT</h3>
+                        <p>Versão gratuita do OpenAI (GPT-3.5)</p>
+                    </div>
+                    <div class="plataforma-item">
+                        <h3>Google Gemini</h3>
+                        <p>Assistente do Google com busca integrada</p>
+                    </div>
+                    <div class="plataforma-item">
+                        <h3>Microsoft Copilot</h3>
+                        <p>Baseado no GPT-4 com acesso gratuito</p>
+                    </div>
+                    <div class="plataforma-item">
+                        <h3>Claude</h3>
+                        <p>Plano gratuito robusto para documentos longos</p>
+                    </div>
+                    <div class="plataforma-item plataforma-destaque">
+                        <h3>7chat.ai</h3>
+                        <p>IA adventista com foco teológico e doutrinário</p>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: #FFF3CD; border-radius: 8px;">
+                    <small><strong>Nota sobre o 7chat.ai:</strong> Desenvolvido pela Igreja Adventista para suporte bíblico, doutrinário e espiritual. Possui limitações e recomenda-se verificar informações com fontes oficiais.</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 12 - RESPONSABILIDADE -->
+        <div class="tela" id="tela12">
+            <div class="card">
+                <div class="icone">⚖️</div>
+                <h2>Responsabilidade no Uso de IA</h2>
+                <p>O uso da IA não é neutro; ele carrega os vieses de seus criadores, impacta a sociedade e levanta questões profundas sobre ética e controle.</p>
+                
+                <div style="background: #E3F2FD; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h3>Princípios para IA Confiável:</h3>
+                    <ul class="lista-ia">
+                        <li>✅ <strong>Justiça:</strong> Evitar discriminação e vieses</li>
+                        <li>✅ <strong>Transparência:</strong> Explicar como decisões são tomadas</li>
+                        <li>✅ <strong>Segurança:</strong> Proteger dados e privacidade</li>
+                        <li>✅ <strong>Responsabilidade:</strong> Humanos no controle</li>
+                        <li>✅ <strong>Serviço:</strong> Beneficiar a humanidade</li>
+                    </ul>
+                </div>
+
+                <p><strong>A responsabilidade é um princípio que deve guiar o desenvolvimento, a implantação e o uso de sistemas inteligentes.</strong></p>
+            </div>
+        </div>
+
+        <!-- TELA 13 - CONCLUSÃO -->
+        <div class="tela tela-biblia" id="tela13">
+            <div class="card">
+                <h2>Conclusão</h2>
+                <p>A Inteligência Artificial é uma das ferramentas mais transformadoras já criadas. Usá-la com responsabilidade não é um obstáculo à inovação, mas a sua condição fundamental para uma inovação duradoura e benéfica.</p>
+                
+                <div class="citacao-biblia">
+                    "Mas ponham à prova todas as coisas e fiquem com o que é bom."<br>
+                    <strong>1 Tessalonicenses 5:21</strong>
+                </div>
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <h3>Trata-se de uma jornada coletiva que exige:</h3>
+                    <div class="grid-exemplos">
+                        <div class="exemplo-card">
+                            <h4>💬 Diálogo Constante</h4>
+                            <p>Entre técnicos, empresas, governos e sociedade</p>
+                        </div>
+                        <div class="exemplo-card">
+                            <h4>🎯 Objetivo Final</h4>
+                            <p>IA confiável, justa e a serviço da humanidade</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVEGAÇÃO -->
+        <div class="navegacao">
+            <button class="botao" onclick="mudarTela(-1)">← Anterior</button>
+            <span style="color: var(--azul-escuro); padding: 12px; font-weight: bold;">Tela <span id="numero-tela">1</span>/13</span>
+            <button class="botao" onclick="mudarTela(1)">Próximo →</button>
         </div>
     </div>
 
     <script>
-        // Dados para os cards - Foco em IA na aprendizagem e eficiência
-        const cardsData = [
-            // Cartões introdutórios
-            {
-                title: "O que é IA?",
-                icon: "🤖",
-                category: "definicao",
-                description: "A Inteligência Artificial (IA) é um campo da ciência da computação que se dedica a criar máquinas capazes de realizar tarefas que normalmente exigiriam inteligência humana.",
-                examples: ["Sistemas de recomendação", "Assistentes virtuais", "Carros autônomos"]
-            },
-            {
-                title: "História da IA",
-                icon: "📜",
-                category: "definicao",
-                description: "O conceito de IA surgiu na década de 1950, com Alan Turing questionando 'As máquinas podem pensar?'. Desde então, a área passou por vários 'invernos' e 'primaveras' de desenvolvimento.",
-                examples: ["Teste de Turing (1950)", "Primeiro programa de IA (1956)", "Deep Blue vence Kasparov (1997)"]
-            },
-            {
-                title: "Machine Learning",
-                icon: "🧠",
-                category: "definicao",
-                description: "Um subcampo da IA onde os algoritmos aprendem padrões a partir de dados, sem serem explicitamente programados para cada tarefa. É a base de muitos sistemas modernos de IA.",
-                examples: ["Reconhecimento de imagem", "Sistemas de recomendação", "Previsão de tendências"]
-            },
-            {
-                title: "Deep Learning",
-                icon: "🔍",
-                category: "definicao",
-                description: "Uma técnica de Machine Learning que usa redes neurais com muitas camadas (daí o 'deep') para aprender representações complexas de dados. É usado em reconhecimento de imagem, voz e muito mais.",
-                examples: ["Reconhecimento facial", "Tradução automática", "Carros autônomos"]
-            },
-            {
-                title: "IA no Cotidiano",
-                icon: "🏠",
-                category: "definicao",
-                description: "Assistentes virtuais (Siri, Alexa), recomendações de conteúdo (Netflix, Spotify), carros autônomos e diagnósticos médicos são exemplos de IA no nosso dia a dia.",
-                examples: ["Assistentes de voz", "Recomendações personalizadas", "Diagnósticos médicos"]
-            },
-            {
-                title: "Ética na IA",
-                icon: "⚖️",
-                category: "definicao",
-                description: "Questões como viés algorítmico, privacidade de dados, transparência e impacto no emprego são desafios éticos importantes no desenvolvimento e uso da IA.",
-                examples: ["Transparência algorítmica", "Privacidade de dados", "Impacto no mercado de trabalho"]
-            },
-            {
-                title: "Futuro da IA",
-                icon: "🚀",
-                category: "definicao",
-                description: "Especialistas preveem avanços em IA geral (AGI), integração mais profunda com biotecnologia e possíveis impactos transformadores na sociedade e economia.",
-                examples: ["IA geral (AGI)", "Integração com biotecnologia", "Impactos socioeconômicos"]
-            },
-            {
-                title: "IA no Brasil",
-                icon: "🇧🇷",
-                category: "definicao",
-                description: "O Brasil tem se destacado em aplicações de IA na agricultura, finanças e saúde, com iniciativas públicas e privadas para fomentar o ecossistema de inovação em IA.",
-                examples: ["Agricultura de precisão", "Fintechs inteligentes", "Telemedicina com IA"]
-            },
-            // Cartões sobre IA na Educação
-            {
-                title: "IA na Educação Personalizada",
-                icon: "🎓",
-                category: "education",
-                description: "Sistemas de IA adaptam o conteúdo educacional ao ritmo e estilo de aprendizagem de cada aluno, criando experiências de aprendizado únicas e eficazes.",
-                examples: [
-                    "Plataformas como Khan Academy e Duolingo usam IA para personalizar exercícios",
-                    "Sistemas recomendam conteúdos com base no desempenho anterior do aluno",
-                    "Adaptação de dificuldade em tempo real conforme o progresso do estudante",
-                    "Análise de estilo de aprendizagem para oferecer materiais mais adequados"
-                ]
-            },
-            {
-                title: "Tutores Inteligentes",
-                icon: "🤖",
-                category: "education",
-                description: "Assistentes de IA fornecem suporte individualizado 24/7, respondendo dúvidas e explicando conceitos de forma personalizada.",
-                examples: [
-                    "Chatbots educacionais que respondem perguntas em qualquer horário",
-                    "Sistemas que identificam lacunas de conhecimento e sugerem revisões específicas",
-                    "Ferramentas que explicam o mesmo conceito de diferentes formas conforme a necessidade",
-                    "Acompanhamento contínuo do progresso do aluno"
-                ]
-            },
-            {
-                title: "Avaliação Automatizada",
-                icon: "📝",
-                category: "education",
-                description: "IA corrige trabalhos e provas, fornecendo feedback imediato e detalhado para acelerar o processo de aprendizagem.",
-                examples: [
-                    "Correção automática de questões dissertativas com análise de conteúdo semântico",
-                    "Feedback instantâneo em exercícios de programação e matemática",
-                    "Análise de padrões de erro para identificar dificuldades comuns na turma",
-                    "Sugestões de exercícios complementares baseados nos erros identificados"
-                ]
-            },
-            {
-                title: "Criação de Conteúdo Educacional",
-                icon: "✍️",
-                category: "education",
-                description: "Ferramentas de IA ajudam professores a criar materiais didáticos personalizados e engajadores.",
-                examples: [
-                    "Geração automática de exercícios e questões de prova contextualizadas",
-                    "Adaptação de textos para diferentes níveis de leitura e compreensão",
-                    "Criação de apresentações e resumos a partir de conteúdo extenso",
-                    "Produção de material multimídia interativo baseado no currículo"
-                ]
-            },
+        // CONTROLE DAS TELAS
+        let telaAtual = 1;
+        const totalTelas = 13;
+
+        function mudarTela(direcao) {
+            const telaAnterior = document.getElementById(`tela${telaAtual}`);
+            telaAnterior.classList.remove('ativa');
             
-            // Cartões sobre IA para Eficiência
-            {
-                title: "Automação de Tarefas Repetitivas",
-                icon: "⚙️",
-                category: "efficiency",
-                description: "IA assume tarefas monótonas, liberando tempo para atividades mais estratégicas e criativas.",
-                examples: [
-                    "Robotic Process Automation (RPA) para processos administrativos repetitivos",
-                    "Organização automática de emails e agendamentos inteligentes",
-                    "Processamento de documentos e extração de informações estruturadas",
-                    "Atualização automática de bancos de dados e sistemas"
-                ]
-            },
-            {
-                title: "Otimização de Processos",
-                icon: "📊",
-                category: "efficiency",
-                description: "Algoritmos analisam dados para identificar melhorias em fluxos de trabalho e aumentar a produtividade.",
-                examples: [
-                    "Sistemas de roteamento inteligente para entregas e logística eficiente",
-                    "Otimização de estoques com previsão de demanda precisa",
-                    "Análise de eficiência em linhas de produção industrial",
-                    "Redução de desperdícios através de monitoramento inteligente"
-                ]
-            },
-            {
-                title: "Assistentes Pessoais Inteligentes",
-                icon: "💼",
-                category: "efficiency",
-                description: "Ferramentas de IA organizam informações e agilizam tomadas de decisão no ambiente profissional.",
-                examples: [
-                    "Agendamento inteligente de reuniões considerando preferências e disponibilidades",
-                    "Resumo automático de documentos longos e relatórios complexos",
-                    "Análise de dados para suporte a decisões estratégicas fundamentadas",
-                    "Organização de tarefas e prioridades com base em prazos e importância"
-                ]
-            },
-            {
-                title: "Aprendizagem Contínua no Trabalho",
-                icon: "📚",
-                category: "efficiency",
-                description: "Sistemas identificam gaps de skills e recomendam treinamentos personalizados para o desenvolvimento profissional.",
-                examples: [
-                    "Plataformas que sugerem cursos baseados nas necessidades específicas da empresa",
-                    "Análise de desempenho para identificar áreas de desenvolvimento individual",
-                    "Microlearning adaptativo durante o fluxo de trabalho",
-                    "Recomendações de conteúdo baseadas em tendências do mercado"
-                ]
-            },
-            {
-                title: "Colaboração Aprimorada por IA",
-                icon: "👥",
-                category: "efficiency",
-                description: "Ferramentas inteligentes facilitam o trabalho em equipe e a comunicação entre departamentos.",
-                examples: [
-                    "Tradução em tempo real em videoconferências internacionais",
-                    "Sistemas que sugerem especialistas internos para projetos específicos",
-                    "Ferramentas de brainstorming assistido por IA com sugestões criativas",
-                    "Plataformas de colaboração que organizam automaticamente contribuições"
-                ]
-            },
-            {
-                title: "Análise Preditiva para Planejamento",
-                icon: "🔮",
-                category: "efficiency",
-                description: "IA prevê tendências e resultados, permitindo planejamento mais preciso e estratégico.",
-                examples: [
-                    "Previsão de vendas baseada em dados históricos e fatores externos",
-                    "Antecipação de necessidades de manutenção em equipamentos industriais",
-                    "Análise de risco em projetos e investimentos corporativos",
-                    "Projeção de cenários para tomada de decisão estratégica"
-                ]
-            },
+            telaAtual += direcao;
             
-            // Cartões sobre Opiniões de Especialistas
-            {
-                title: "Andrew Ng - Visão Otimista",
-                icon: "🌟",
-                category: "opinions",
-                description: "\"Assim como a eletricidade transformou quase tudo há 100 anos, hoje eu dificilmente consigo pensar em uma indústria que não será transformada pela IA nos próximos anos. A IA é a nova eletricidade.\"",
-                expertInfo: "Co-fundador do Coursera; ex-chefe de IA do Baidu; Professor de Stanford",
-                reference: "Ng, A. (2017). 'AI is the New Electricity'. Congresso de IA da Stanford GSB."
-            },
-            {
-                title: "Kai-Fu Lee - Potencial Transformador",
-                icon: "💡",
-                category: "opinions",
-                description: "\"A IA é indiscutivelmente a tecnologia mais importante do mundo hoje. Ela já está criando um valor econômico colossal e irá reestruturar todas as indústrias... A IA nos libertará de trabalhos repetitivos.\"",
-                expertInfo: "CEO da Sinovation Ventures; autor de 'AI Superpowers'",
-                reference: "Lee, K. (2018). AI Superpowers: China, Silicon Valley, and the New World Order."
-            },
-            {
-                title: "Erik Brynjolfsson - Oportunidade Histórica",
-                icon: "📈",
-                category: "opinions",
-                description: "\"Esta é a maior oportunidade para melhorar vidas que já tivemos... O desafio não é a tecnologia, mas reinventar nossos processos empresariais, nossas habilidades e nossas instituições sociais.\"",
-                expertInfo: "Professor do MIT; Diretor da Iniciativa sobre Economia Digital",
-                reference: "Brynjolfsson, E., & McAfee, A. (2014). The Second Machine Age."
-            },
-            {
-                title: "Nick Bostrom - Riscos Existenciais",
-                icon: "⚠️",
-                category: "opinions",
-                description: "\"O surgimento da superinteligência será o evento mais importante da história da humanidade. E pode ser o último – a menos que aprendamos a alinhar os objetivos da superinteligência com os nossos.\"",
-                expertInfo: "Professor de Oxford; Diretor do Instituto para o Futuro da Humanidade",
-                reference: "Bostrom, N. (2014). Superintelligence: Paths, Dangers, Strategies."
-            },
-            {
-                title: "Joy Buolamwini - Viés Algorítmico",
-                icon: "⚖️",
-                category: "opinions",
-                description: "\"A ascensão da automação pode ser uma força para a equidade ou para a desigualdade. Atualmente, estamos codificando a desigualdade em nossos sistemas. Se não abordarmos os vieses na IA, arriscamos a ampliação da discriminação em escala industrial.\"",
-                expertInfo: "Fundadora do Algorithmic Justice League; Pesquisadora do MIT Media Lab",
-                reference: "Buolamwini, J. (2016). 'Gender Shades: Intersectional Accuracy Disparities'."
-            },
-            {
-                title: "Yuval Noah Harari - Ditaduras Digitais",
-                icon: "👁️",
-                category: "opinions",
-                description: "\"Os algoritmos podem me conhecer melhor do que eu me conheço. E uma vez que os algoritmos me conhecem, eles podem manipular meus sentimentos... O maior perigo é o surgimento de ditaduras digitais, que podem monitorar todos o tempo todo.\"",
-                expertInfo: "Historiador e Filósofo; autor de 'Sapiens' e '21 Lições para o Século 21'",
-                reference: "Harari, Y. N. (2018). 21 Lessons for the 21st Century."
-            },
-            {
-                title: "Stuart Russell - Controle e Alinhamento",
-                icon: "🎯",
-                category: "opinions",
-                description: "\"Precisamos de uma reformulação fundamental da IA... Se o objetivo não for perfeitamente alinhado com os verdadeiros valores humanos – que são complexos e difíceis de definir –, o resultado pode ser desastroso.\"",
-                expertInfo: "Professor de Ciência da Computação da UC Berkeley",
-                reference: "Russell, S. (2019). Human Compatible: Artificial Intelligence and the Problem of Control."
+            // Limites
+            if (telaAtual < 1) telaAtual = 1;
+            if (telaAtual > totalTelas) telaAtual = totalTelas;
+            
+            const novaTela = document.getElementById(`tela${telaAtual}`);
+            novaTela.classList.add('ativa');
+            
+            // Atualizar contador
+            document.getElementById('contador').textContent = `${telaAtual}/${totalTelas}`;
+            document.getElementById('numero-tela').textContent = telaAtual;
+        }
+
+        // NAVEGAÇÃO POR TECLADO
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') mudarTela(1);
+            if (e.key === 'ArrowLeft') mudarTela(-1);
+        });
+
+        // TOUCH SWIPE PARA MOBILE
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) mudarTela(1);   // Swipe left
+                else mudarTela(-1);           // Swipe right
             }
-        ];
+        });
 
-        // Variáveis de controle
-        let currentCardIndex = 0;
-        let currentCategory = "all";
-        const cardsPerView = getCardsPerView();
-
-        // Inicializar a apresentação
-        function initPresentation() {
-            renderCards();
-            updateProgressBar();
-            updateCardCount();
-            setupEventListeners();
-        }
-
-        // Determinar quantos cards mostrar com base no tamanho da tela
-        function getCardsPerView() {
-            if (window.innerWidth < 768) return 1;
-            if (window.innerWidth < 1200) return 2;
-            return 3;
-        }
-
-        // Filtrar cards por categoria
-        function getFilteredCards() {
-            if (currentCategory === "all") return cardsData;
-            return cardsData.filter(card => card.category === currentCategory);
-        }
-
-        // Renderizar os cards
-        function renderCards() {
-            const container = document.getElementById('cards-container');
-            container.innerHTML = '';
-            
-            const filteredCards = getFilteredCards();
-            
-            // Calcular índices dos cards a serem mostrados
-            const startIndex = Math.max(0, currentCardIndex);
-            const endIndex = Math.min(filteredCards.length, currentCardIndex + cardsPerView);
-            
-            for (let i = startIndex; i < endIndex; i++) {
-                const cardData = filteredCards[i];
-                const card = document.createElement('div');
-                card.className = 'card';
-                
-                // Verificar se existem exemplos para mostrar
-                const examplesHTML = cardData.examples ? 
-                    `<div class="example-list">
-                        <strong>Exemplos:</strong>
-                        <ul>
-                            ${cardData.examples.map(example => `<li>${example}</li>`).join('')}
-                        </ul>
-                    </div>` : '';
-                
-                // Verificar se é um card de opinião de especialista
-                const expertInfoHTML = cardData.expertInfo ? 
-                    `<div class="expert-info">${cardData.expertInfo}</div>` : '';
-                
-                const referenceHTML = cardData.reference ? 
-                    `<div class="reference">Referência: ${cardData.reference}</div>` : '';
-                
-                card.innerHTML = `
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <div class="card-icon">${cardData.icon}</div>
-                            <div class="card-title">${cardData.title}</div>
-                            <p>Clique para virar</p>
-                        </div>
-                        <div class="card-back">
-                            <div class="card-content">
-                                <div class="card-title">${cardData.title}</div>
-                                <div class="card-description">${cardData.description}</div>
-                                ${expertInfoHTML}
-                                ${referenceHTML}
-                                ${examplesHTML}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                // Adicionar evento de clique para virar o card
-                card.addEventListener('click', function() {
-                    this.classList.toggle('flipped');
-                });
-                
-                container.appendChild(card);
-            }
-            
-            updateCardCount();
-        }
-
-        // Atualizar a barra de progresso
-        function updateProgressBar() {
-            const progress = document.getElementById('progress');
-            const filteredCards = getFilteredCards();
-            const percentage = ((currentCardIndex + cardsPerView) / filteredCards.length) * 100;
-            progress.style.width = Math.min(percentage, 100) + '%';
-        }
-
-        // Atualizar o contador de cards
-        function updateCardCount() {
-            const countElement = document.getElementById('card-count');
-            const filteredCards = getFilteredCards();
-            const currentPage = Math.floor(currentCardIndex / cardsPerView) + 1;
-            const totalPages = Math.ceil(filteredCards.length / cardsPerView);
-            
-            countElement.textContent = `Página ${currentPage} de ${totalPages} - ${filteredCards.length} cards no total`;
-        }
-
-        // Configurar os event listeners
-        function setupEventListeners() {
-            document.getElementById('next-btn').addEventListener('click', nextCards);
-            document.getElementById('prev-btn').addEventListener('click', previousCards);
-            document.getElementById('reset-btn').addEventListener('click', resetPresentation);
-            
-            // Event listeners para os botões de categoria
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentCategory = this.getAttribute('data-category');
-                    currentCardIndex = 0;
-                    renderCards();
-                    updateProgressBar();
-                });
-            });
-            
-            // Atualizar layout quando a janela for redimensionada
-            window.addEventListener('resize', function() {
-                currentCardIndex = 0;
-                renderCards();
-                updateProgressBar();
-            });
-        }
-
-        // Navegar para os próximos cards
-        function nextCards() {
-            const filteredCards = getFilteredCards();
-            if (currentCardIndex + cardsPerView < filteredCards.length) {
-                currentCardIndex += cardsPerView;
-                renderCards();
-                updateProgressBar();
-            }
-        }
-
-        // Navegar para os cards anteriores
-        function previousCards() {
-            if (currentCardIndex - cardsPerView >= 0) {
-                currentCardIndex -= cardsPerView;
-            } else {
-                currentCardIndex = 0;
-            }
-            renderCards();
-            updateProgressBar();
-        }
-
-        // Reiniciar a apresentação
-        function resetPresentation() {
-            currentCardIndex = 0;
-            renderCards();
-            updateProgressBar();
-        }
-
-        // Inicializar quando o documento estiver carregado
-        document.addEventListener('DOMContentLoaded', initPresentation);
+        // INICIALIZAR CONTADOR
+        document.getElementById('contador').textContent = `1/${totalTelas}`;
     </script>
 </body>
 </html>
